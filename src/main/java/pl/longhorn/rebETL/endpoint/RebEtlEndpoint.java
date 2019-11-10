@@ -18,28 +18,28 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @AllArgsConstructor
-public class ETLProcessingEndpoint {
+public class RebEtlEndpoint {
 
-    private final SequenceEtlProcessingService etlProcessingService;
+    private final SequenceEtlProcessingService sequenceEtlProcessingService;
     private final CsvService csvService;
     private final DownloadDataService downloadDataService;
 
     @PostMapping("export")
     public ExportView export(@RequestBody String url) {
         ExportParam param = new ExportParam(url);
-        long affectedRow = etlProcessingService.process(param);
+        long affectedRow = sequenceEtlProcessingService.process(param);
         return new ExportView(affectedRow);
     }
 
     @PostMapping("transform")
     public TransformView transform() {
-        long affectedRow = etlProcessingService.process(new TransformParam());
+        long affectedRow = sequenceEtlProcessingService.process(new TransformParam());
         return new TransformView(affectedRow);
     }
 
     @PostMapping("load")
     public LoadView load() {
-        long affectedRow = etlProcessingService.process(new LoadParam());
+        long affectedRow = sequenceEtlProcessingService.process(new LoadParam());
         return new LoadView(affectedRow);
     }
 
@@ -54,7 +54,7 @@ public class ETLProcessingEndpoint {
 
     @PostMapping("clear")
     public long clear() {
-        return etlProcessingService.process(new ClearParam());
+        return sequenceEtlProcessingService.process(new ClearParam());
     }
 
     @GetMapping("csv")
