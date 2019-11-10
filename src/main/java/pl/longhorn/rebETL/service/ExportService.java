@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import pl.longhorn.rebETL.model.comment.HtmlComment;
 import pl.longhorn.rebETL.model.exception.IllegalUrlException;
-import pl.longhorn.rebETL.model.processing.ExportParam;
+import pl.longhorn.rebETL.model.export.ExportParam;
 import pl.longhorn.rebETL.util.HtmlCommentsFactory;
 import pl.longhorn.rebETL.util.UrlHelper;
 

@@ -1,6 +1,8 @@
-package pl.longhorn.rebETL.model.processing;
+package pl.longhorn.rebETL.model.export;
 
 import lombok.Value;
+import pl.longhorn.rebETL.model.processing.ProcessParam;
+import pl.longhorn.rebETL.model.processing.TaskType;
 import pl.longhorn.rebETL.service.ExportService;
 
 @Value

@@ -1,6 +1,8 @@
-package pl.longhorn.rebETL.model.processing;
+package pl.longhorn.rebETL.model.clear;
 
 import lombok.AllArgsConstructor;
+import pl.longhorn.rebETL.model.processing.ProcessParam;
+import pl.longhorn.rebETL.model.processing.TaskType;
 import pl.longhorn.rebETL.service.ClearingService;
 
 @AllArgsConstructor

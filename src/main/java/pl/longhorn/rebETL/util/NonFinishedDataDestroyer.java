@@ -8,7 +8,7 @@ import pl.longhorn.rebETL.service.FileSystemService;
 
 @Component
 @RequiredArgsConstructor
-public class NotFinishedDataDestroyer implements DisposableBean {
+public class NonFinishedDataDestroyer implements DisposableBean {
 
     private final FileSystemService fileSystemService;
     private final CommentRepository commentRepository;
