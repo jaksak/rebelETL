@@ -9,9 +9,4 @@ public class LoadParam implements ProcessParam<LoadService> {
     public TaskType getType() {
         return TaskType.LOAD;
     }
-
-    @Override
-    public Class<LoadService> getServedBy() {
-        return LoadService.class;
-    }
 }
