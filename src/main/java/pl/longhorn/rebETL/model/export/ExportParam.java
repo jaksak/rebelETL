@@ -13,9 +13,4 @@ public class ExportParam implements ProcessParam<ExportService> {
     public TaskType getType() {
         return TaskType.EXPORT;
     }
-
-    @Override
-    public Class<ExportService> getServedBy() {
-        return ExportService.class;
-    }
 }

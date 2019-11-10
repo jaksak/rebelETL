@@ -9,9 +9,4 @@ public class TransformParam implements ProcessParam<TransformService> {
     public TaskType getType() {
         return TaskType.TRANSFORM;
     }
-
-    @Override
-    public Class<TransformService> getServedBy() {
-        return TransformService.class;
-    }
 }

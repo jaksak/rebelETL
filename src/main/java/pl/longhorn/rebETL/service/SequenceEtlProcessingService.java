@@ -7,28 +7,39 @@ import pl.longhorn.rebETL.model.processing.ProcessParam;
 import pl.longhorn.rebETL.model.processing.TaskType;
 import pl.longhorn.rebETL.util.TaskValidator;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
 
 
 @Component
 public class SequenceEtlProcessingService {
 
     private final ReentrantLock lock = new ReentrantLock();
-    private final Map<Class, EtlService> etlServices;
+    private final Map<Class, EtlService> etlServices = new ConcurrentHashMap<>();
     private TaskType lastFinishedTask = null;
 
     public SequenceEtlProcessingService(List<EtlService> etlServices) {
-        this.etlServices = etlServices.stream().collect(Collectors.toMap(EtlService::getClass, service -> service));
+        etlServices.forEach(this::addElServiceToMap);
+    }
+
+    private void addElServiceToMap(EtlService etlService) {
+        for (Type genericInterface : etlService.getClass().getGenericInterfaces()) {
+            Type[] genericTypes = ((ParameterizedType) genericInterface).getActualTypeArguments();
+            for (Type genericType : genericTypes) {
+                etlServices.put((Class) genericType, etlService);
+            }
+        }
     }
 
     public long process(ProcessParam param) {
         blockOtherRequest();
         try {
             checkPossibilityToStart(param.getType());
-            val choosedService = etlServices.get(param.getServedBy());
+            val choosedService = etlServices.get(param.getClass());
             long result = choosedService.process(param);
             lastFinishedTask = param.getType();
             return result;
