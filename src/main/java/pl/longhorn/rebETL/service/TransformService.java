@@ -5,7 +5,7 @@ import lombok.val;
 import org.springframework.stereotype.Component;
 import pl.longhorn.rebETL.model.comment.Comment;
 import pl.longhorn.rebETL.model.comment.HtmlComment;
-import pl.longhorn.rebETL.model.processing.TransformParam;
+import pl.longhorn.rebETL.model.transform.TransformParam;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

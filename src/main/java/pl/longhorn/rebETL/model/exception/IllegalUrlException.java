@@ -7,6 +7,6 @@ public class IllegalUrlException extends ResponseStatusException {
 
 
     public IllegalUrlException() {
-        super(HttpStatus.BAD_REQUEST, "Invalid url");
+        super(HttpStatus.BAD_REQUEST, "invalid-url");
     }
 }

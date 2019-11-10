@@ -2,12 +2,13 @@ package pl.longhorn.rebETL.endpoint;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import pl.longhorn.rebETL.model.CompleteView;
+import pl.longhorn.rebETL.model.clear.ClearParam;
+import pl.longhorn.rebETL.model.export.ExportParam;
 import pl.longhorn.rebETL.model.export.ExportView;
+import pl.longhorn.rebETL.model.load.LoadParam;
 import pl.longhorn.rebETL.model.load.LoadView;
-import pl.longhorn.rebETL.model.processing.ClearParam;
-import pl.longhorn.rebETL.model.processing.ExportParam;
-import pl.longhorn.rebETL.model.processing.LoadParam;
-import pl.longhorn.rebETL.model.processing.TransformParam;
+import pl.longhorn.rebETL.model.transform.TransformParam;
 import pl.longhorn.rebETL.model.transform.TransformView;
 import pl.longhorn.rebETL.service.CsvService;
 import pl.longhorn.rebETL.service.DownloadDataService;
@@ -42,6 +43,15 @@ public class ETLProcessingEndpoint {
         return new LoadView(affectedRow);
     }
 
+    @PostMapping
+    public CompleteView exportTransformAndLoad(@RequestBody String url) {
+        return CompleteView.builder()
+                .exportView(export(url))
+                .transformView(transform())
+                .loadView(load())
+                .build();
+    }
+
     @PostMapping("clear")
     public long clear() {
         return etlProcessingService.process(new ClearParam());
@@ -52,7 +62,7 @@ public class ETLProcessingEndpoint {
         csvService.downloadData(response);
     }
 
-    @GetMapping("/{id}/")
+    @GetMapping("{id}/")
     public void download(@PathVariable("id") int id, HttpServletResponse response) {
         downloadDataService.download(id, response);
     }
