@@ -5,6 +5,7 @@ import lombok.val;
 import org.springframework.stereotype.Component;
 import pl.longhorn.rebETL.model.comment.Comment;
 import pl.longhorn.rebETL.model.comment.HtmlComment;
+import pl.longhorn.rebETL.model.processing.TransformParam;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
-public class TransformService {
+public class TransformService implements EtlService<TransformParam> {
 
     private final Pattern DATE_RUBBISH_REMOVER_PATTERN = Pattern.compile("\\d{2}.\\d{2}.\\d{4}");
     private final Pattern PRODUCT_RATING_PATTERN = Pattern.compile("\\d");
@@ -21,14 +22,18 @@ public class TransformService {
 
     private final FileSystemService fileSystemService;
 
-    public void transformData() {
+    @Override
+    public long process(TransformParam param) {
         var htmlCommentWithPathDataOptional = fileSystemService.getAnyHtmlComment();
+        int affectedRow = 0;
         for (; htmlCommentWithPathDataOptional.isPresent(); htmlCommentWithPathDataOptional = fileSystemService.getAnyHtmlComment()) {
             var htmlCommentWithPathData = htmlCommentWithPathDataOptional.get();
             var comment = fromHtmlComment(htmlCommentWithPathData.getHtmlComment());
             fileSystemService.save(comment);
             fileSystemService.remove(htmlCommentWithPathData.getPath());
+            affectedRow++;
         }
+        return affectedRow;
     }
 
     private Comment fromHtmlComment(HtmlComment htmlComment) {
@@ -47,9 +52,11 @@ public class TransformService {
     }
 
     private Integer getProductRating(String productRating) {
-        val matcher = PRODUCT_RATING_PATTERN.matcher(productRating);
-        if (matcher.find()) {
-            return Integer.parseInt(matcher.group());
+        if (productRating != null) {
+            val matcher = PRODUCT_RATING_PATTERN.matcher(productRating);
+            if (matcher.find()) {
+                return Integer.parseInt(matcher.group());
+            }
         }
         return null;
     }

@@ -4,5 +4,5 @@ import lombok.Value;
 
 @Value
 public class ExportView {
-    private final int affectedRow;
+    private final long affectedRow;
 }

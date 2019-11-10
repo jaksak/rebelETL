@@ -8,25 +8,24 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import pl.longhorn.rebETL.model.comment.HtmlComment;
 import pl.longhorn.rebETL.model.exception.IllegalUrlException;
-import pl.longhorn.rebETL.model.export.ExportView;
+import pl.longhorn.rebETL.model.processing.ExportParam;
 import pl.longhorn.rebETL.util.HtmlCommentsFactory;
 import pl.longhorn.rebETL.util.UrlHelper;
 
-import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-public class ExportService {
+public class ExportService implements EtlService<ExportParam> {
 
     private final String COMMENT_CLASS_NAME = "user-comment";
 
     private final FileSystemService fileSystemService;
 
-    public ExportView exportFromIndexPage(@NotEmpty String url) {
-        String pathToAllComments = UrlHelper.getPathToAllComments(url);
-        int affectedAmount = exportFromAllCommentsPage(pathToAllComments);
-        return new ExportView(affectedAmount);
+    @Override
+    public long process(ExportParam param) {
+        String pathToAllComments = UrlHelper.getPathToAllComments(param.getUrl());
+        return exportFromAllCommentsPage(pathToAllComments);
     }
 
     private int exportFromAllCommentsPage(String pathToAllComments) {
