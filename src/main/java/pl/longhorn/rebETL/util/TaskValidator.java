@@ -9,7 +9,7 @@ public class TaskValidator {
     private final static ConcurrentHashMap<TaskType, Predicate<TaskType>> requirementsToStartProcess = new ConcurrentHashMap<>();
 
     static {
-        requirementsToStartProcess.put(TaskType.EXPORT, status -> status == null || TaskType.LOAD.equals(status));
+        requirementsToStartProcess.put(TaskType.EXPORT, status -> !TaskType.EXPORT.equals(status) && !TaskType.TRANSFORM.equals(status));
         requirementsToStartProcess.put(TaskType.TRANSFORM, TaskType.EXPORT::equals);
         requirementsToStartProcess.put(TaskType.LOAD, TaskType.TRANSFORM::equals);
     }

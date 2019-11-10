@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @RequiredArgsConstructor
@@ -103,15 +104,21 @@ public class FileSystemService {
         }
     }
 
-    public void clear() {
-        clear(PATH_TO_RAW_DATA_FOLDER);
-        clear(PATH_TO_TRANSFORMED_DATA_FOLDER);
+    public long clear() {
+        long affectedRow = clear(PATH_TO_RAW_DATA_FOLDER);
+        affectedRow += clear(PATH_TO_TRANSFORMED_DATA_FOLDER);
+        return affectedRow;
     }
 
     @SneakyThrows
-    private void clear(String path) {
+    private long clear(String path) {
+        AtomicInteger affectedRow = new AtomicInteger();
         Files.walk(Paths.get(path))
                 .filter(this::isStandardDataFile)
-                .forEach(this::remove);
+                .forEach(file -> {
+                    remove(file);
+                    affectedRow.getAndIncrement();
+                });
+        return affectedRow.get();
     }
 }

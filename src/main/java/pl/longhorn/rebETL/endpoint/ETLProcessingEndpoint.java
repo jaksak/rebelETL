@@ -1,23 +1,28 @@
 package pl.longhorn.rebETL.endpoint;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.SneakyThrows;
+import org.springframework.web.bind.annotation.*;
 import pl.longhorn.rebETL.model.export.ExportView;
 import pl.longhorn.rebETL.model.load.LoadView;
+import pl.longhorn.rebETL.model.processing.ClearParam;
 import pl.longhorn.rebETL.model.processing.ExportParam;
 import pl.longhorn.rebETL.model.processing.LoadParam;
 import pl.longhorn.rebETL.model.processing.TransformParam;
 import pl.longhorn.rebETL.model.transform.TransformView;
+import pl.longhorn.rebETL.service.CsvService;
+import pl.longhorn.rebETL.service.DownloadDataService;
 import pl.longhorn.rebETL.service.SequenceEtlProcessingService;
 
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @AllArgsConstructor
 public class ETLProcessingEndpoint {
 
     private final SequenceEtlProcessingService etlProcessingService;
+    private final CsvService csvService;
+    private final DownloadDataService downloadDataService;
 
     @PostMapping("export")
     public ExportView export(@RequestBody String url) {
@@ -36,5 +41,22 @@ public class ETLProcessingEndpoint {
     public LoadView load() {
         long affectedRow = etlProcessingService.process(new LoadParam());
         return new LoadView(affectedRow);
+    }
+
+    @PostMapping("clear")
+    public long clear() {
+        long affectedRow = etlProcessingService.process(new ClearParam());
+        return affectedRow;
+    }
+
+    @GetMapping("csv")
+    public void downloadCsv(HttpServletResponse response) {
+        csvService.downloadData(response);
+    }
+
+    @GetMapping("/{id}")
+    @SneakyThrows
+    public void download(@PathVariable("id") int id, HttpServletResponse response) {
+        downloadDataService.download(id, response);
     }
 }
