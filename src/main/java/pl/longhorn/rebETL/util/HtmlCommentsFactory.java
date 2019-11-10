@@ -1,9 +1,12 @@
 package pl.longhorn.rebETL.util;
 
+import lombok.val;
 import org.jsoup.nodes.Element;
 import pl.longhorn.rebETL.model.comment.HtmlComment;
 
 public class HtmlCommentsFactory {
+    private static final int NUMBER_PRODUCT_RATING_ELEMENT_INDEX = 1;
+
     public static HtmlComment from(Element one) {
         return HtmlComment.builder()
                 .id(getId(one))
@@ -28,7 +31,11 @@ public class HtmlCommentsFactory {
     }
 
     private static String getProductRating(Element one) {
-        return one.getElementsByClass("header").first().getElementsByTag("div").get(1).className();
+        val elements = one.getElementsByClass("header").first().getElementsByTag("div");
+        if (elements.size() == NUMBER_PRODUCT_RATING_ELEMENT_INDEX + 1) {
+            return elements.get(1).className();
+        }
+        return null;
     }
 
     private static String getDate(Element one) {
