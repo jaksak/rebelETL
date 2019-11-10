@@ -1,7 +1,6 @@
 package pl.longhorn.rebETL.endpoint;
 
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
 import pl.longhorn.rebETL.model.export.ExportView;
 import pl.longhorn.rebETL.model.load.LoadView;
@@ -53,8 +52,7 @@ public class ETLProcessingEndpoint {
         csvService.downloadData(response);
     }
 
-    @GetMapping("/{id}")
-    @SneakyThrows
+    @GetMapping("/{id}/")
     public void download(@PathVariable("id") int id, HttpServletResponse response) {
         downloadDataService.download(id, response);
     }
