@@ -45,8 +45,7 @@ public class ETLProcessingEndpoint {
 
     @PostMapping("clear")
     public long clear() {
-        long affectedRow = etlProcessingService.process(new ClearParam());
-        return affectedRow;
+        return etlProcessingService.process(new ClearParam());
     }
 
     @GetMapping("csv")
