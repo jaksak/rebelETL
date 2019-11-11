@@ -13,4 +13,9 @@ public class ExportParam implements ProcessParam<ExportService> {
     public TaskType getType() {
         return TaskType.EXPORT;
     }
+
+    @Override
+    public boolean canStartWhen(TaskType lastTask) {
+        return !TaskType.EXPORT.equals(lastTask) && !TaskType.TRANSFORM.equals(lastTask);
+    }
 }

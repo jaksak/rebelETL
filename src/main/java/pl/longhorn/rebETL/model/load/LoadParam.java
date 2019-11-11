@@ -9,4 +9,9 @@ public class LoadParam implements ProcessParam<LoadService> {
     public TaskType getType() {
         return TaskType.LOAD;
     }
+
+    @Override
+    public boolean canStartWhen(TaskType lastTask) {
+        return TaskType.TRANSFORM.equals(lastTask);
+    }
 }

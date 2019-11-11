@@ -9,4 +9,9 @@ public class TransformParam implements ProcessParam<TransformService> {
     public TaskType getType() {
         return TaskType.TRANSFORM;
     }
+
+    @Override
+    public boolean canStartWhen(TaskType lastTask) {
+        return TaskType.EXPORT.equals(lastTask);
+    }
 }

@@ -10,4 +10,9 @@ public class ClearParam implements ProcessParam {
     public TaskType getType() {
         return TaskType.CLEAR;
     }
+
+    @Override
+    public boolean canStartWhen(TaskType lastTask) {
+        return true;
+    }
 }

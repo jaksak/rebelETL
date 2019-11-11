@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import pl.longhorn.rebETL.model.exception.IllegalTaskException;
 import pl.longhorn.rebETL.model.processing.ProcessParam;
 import pl.longhorn.rebETL.model.processing.TaskType;
-import pl.longhorn.rebETL.util.TaskValidator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -19,18 +18,18 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SequenceEtlProcessingService {
 
     private final ReentrantLock lock = new ReentrantLock();
-    private final Map<Class, EtlService> etlServices = new ConcurrentHashMap<>();
+    private final Map<Class, EtlService> etlServicesByServedClass = new ConcurrentHashMap<>();
     private TaskType lastFinishedTask = null;
 
-    public SequenceEtlProcessingService(List<EtlService> etlServices) {
-        etlServices.forEach(this::addElServiceToMap);
+    public SequenceEtlProcessingService(List<EtlService> eltServices) {
+        eltServices.forEach(this::addElServiceToMap);
     }
 
     private void addElServiceToMap(EtlService etlService) {
         for (Type genericInterface : etlService.getClass().getGenericInterfaces()) {
             Type[] genericTypes = ((ParameterizedType) genericInterface).getActualTypeArguments();
             for (Type genericType : genericTypes) {
-                etlServices.put((Class) genericType, etlService);
+                etlServicesByServedClass.put((Class) genericType, etlService);
             }
         }
     }
@@ -38,8 +37,8 @@ public class SequenceEtlProcessingService {
     public long process(ProcessParam param) {
         blockOtherRequest();
         try {
-            checkPossibilityToStart(param.getType());
-            val choosedService = etlServices.get(param.getClass());
+            checkPossibilityToStart(param);
+            val choosedService = etlServicesByServedClass.get(param.getClass());
             long result = choosedService.process(param);
             lastFinishedTask = param.getType();
             return result;
@@ -52,8 +51,8 @@ public class SequenceEtlProcessingService {
         lock.lock();
     }
 
-    private void checkPossibilityToStart(TaskType task) {
-        if (!TaskValidator.isPossibleToDoWhenStatus(task, lastFinishedTask)) {
+    private void checkPossibilityToStart(ProcessParam param) {
+        if (!param.canStartWhen(lastFinishedTask)) {
             throw new IllegalTaskException();
         }
     }
