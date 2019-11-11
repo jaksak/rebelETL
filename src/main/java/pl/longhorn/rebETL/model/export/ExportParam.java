@@ -3,10 +3,9 @@ package pl.longhorn.rebETL.model.export;
 import lombok.Value;
 import pl.longhorn.rebETL.model.processing.ProcessParam;
 import pl.longhorn.rebETL.model.processing.TaskType;
-import pl.longhorn.rebETL.service.ExportService;
 
 @Value
-public class ExportParam implements ProcessParam<ExportService> {
+public class ExportParam implements ProcessParam {
     private String url;
 
     @Override
