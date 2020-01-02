@@ -2,6 +2,7 @@ package pl.longhorn.rebETL.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.var;
 import org.springframework.stereotype.Component;
 import pl.longhorn.rebETL.model.comment.Comment;
 import pl.longhorn.rebETL.model.comment.HtmlComment;

@@ -1,6 +1,7 @@
 package pl.longhorn.rebETL.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.var;
 import org.springframework.stereotype.Component;
 import pl.longhorn.rebETL.model.load.LoadParam;
 import pl.longhorn.rebETL.repository.CommentRepository;
