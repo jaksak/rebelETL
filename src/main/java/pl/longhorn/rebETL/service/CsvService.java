@@ -2,6 +2,7 @@ package pl.longhorn.rebETL.service;
 
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.supercsv.io.CsvBeanWriter;
@@ -22,7 +23,8 @@ public class CsvService {
     @SneakyThrows
     public void downloadData(HttpServletResponse response) {
         setHeader(response);
-        CsvBeanWriter csvBeanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_PREFERENCE);
+        val responseWriter = response.getWriter();
+        CsvBeanWriter csvBeanWriter = new CsvBeanWriter(responseWriter, CsvPreference.EXCEL_PREFERENCE);
         commentRepository.findAll().forEach(comment -> {
             try {
                 csvBeanWriter.write(comment, "id", "nick", "date", "productRating", "commentRating", "text");
@@ -30,6 +32,8 @@ public class CsvService {
                 e.printStackTrace();
             }
         });
+        csvBeanWriter.flush();
+        csvBeanWriter.close();
     }
 
     private void setHeader(HttpServletResponse response) {

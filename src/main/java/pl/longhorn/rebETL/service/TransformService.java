@@ -48,7 +48,7 @@ public class TransformService implements EtlService<TransformParam> {
     }
 
     private Integer getCommentRating(String commentRating) {
-        return Integer.parseInt(commentRating);
+        return commentRating != null && commentRating.length() > 0 ? Integer.parseInt(commentRating) : null;
     }
 
     private Integer getProductRating(String productRating) {

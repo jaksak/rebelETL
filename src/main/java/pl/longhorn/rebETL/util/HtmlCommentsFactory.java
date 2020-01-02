@@ -6,6 +6,7 @@ import pl.longhorn.rebETL.model.comment.HtmlComment;
 
 public class HtmlCommentsFactory {
     private static final int NUMBER_PRODUCT_RATING_ELEMENT_INDEX = 1;
+    private static final int PRIME = 31;
 
     public static HtmlComment from(Element one) {
         return HtmlComment.builder()
@@ -19,11 +20,16 @@ public class HtmlCommentsFactory {
     }
 
     private static String getCommentRating(Element one) {
-        return one.getElementById("comment-voting").getElementsByClass("amount").text();
+        val votingElement = one.getElementById("comment-voting");
+        return votingElement == null ? "" : votingElement.getElementsByClass("amount").text();
     }
 
     private static String getId(Element one) {
-        return one.getElementById("comment-voting").attr("comment-id");
+        val elementWithId = one.getElementById("comment-voting");
+        if (elementWithId == null) {
+            return createId(one.toString());
+        }
+        return elementWithId.attr("comment-id");
     }
 
     private static String getText(Element one) {
@@ -48,5 +54,9 @@ public class HtmlCommentsFactory {
                 .getElementsByTag("b")
                 .first()
                 .text();
+    }
+
+    private static String createId(String string) {
+        return string.hashCode() * PRIME + "";
     }
 }
