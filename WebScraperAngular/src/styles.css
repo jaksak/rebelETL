@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.bodyyy{
+    background-image: url("/assets/background.jpg");
+}
+.body2{
+background-color: rgb(248, 233, 229)
+}
+.jumbotron2{
+    background-color: #DFC7C1
+}

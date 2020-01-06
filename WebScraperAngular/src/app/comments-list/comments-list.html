@@ -1,0 +1,107 @@
+<div class="center">
+    <div class="jumbotron">
+        <h1>Comments Webscraper</h1>
+        <hr>
+    </div>
+    <div *ngIf="false">
+        <a>Text</a>
+    </div>
+    <div class="margin">
+        <div>
+            <i><h3>Wykonanie procesu ETL krok po kroku</h3></i>
+        </div>
+        <button class="btn btn-info btn-lg margin-small" [disabled]="disabled" (click)="Extract()">
+            <ng-container *ngIf="loadingE"><i class="fas fa-spinner fa-spin"></i> Processing... </ng-container> 
+            <ng-container *ngIf="!loadingE"><i>Extract</i></ng-container> </button>
+        <button class="btn btn-info btn-lg margin-small" [disabled]="disabled"  (click)="Transform()">
+            <ng-container *ngIf="loadingT"><i class="fas fa-spinner fa-spin"></i> Processing... </ng-container> 
+            <ng-container *ngIf="!loadingT"><i>Transform</i></ng-container> </button>
+        <button class="btn btn-info btn-lg margin-small" [disabled]="disabled" (click)="Load()">
+            <ng-container *ngIf="loadingL"><i class="fas fa-spinner fa-spin"></i> Processing... </ng-container>
+            <ng-container *ngIf="!loadingL"><i>Load</i></ng-container></button>
+    </div>
+    <div class="margin2">
+        <div class="margin-b">
+            <i>
+                <h3>Wykonanie całego procesu ETL</h3>
+            </i>
+        </div>
+        <button class="btn btn-success btn-lg" [disabled]="disabled" (click)="ETL()">
+            <ng-container *ngIf="loadingETL"><i class="fas fa-spinner fa-spin"></i> Processing... </ng-container>
+            <ng-container *ngIf="!loadingETL"><i>ETL</i></ng-container></button>
+    </div>
+</div>
+   <div>
+   <div class="mat-elevation-z8 table-size center"style="position: relative;" >
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+      <ng-container matColumnDef="noRecord">
+        <td mat-footer-cell *matFooterCellDef><i *ngIf="dataSource.data.length == 0">Brak danych</i></td>
+      </ng-container> 
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="commentRating">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment Rating </th>
+        <td mat-cell *matCellDef="let element"> {{element.commentRating}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
+        <td mat-cell *matCellDef="let element"> {{element.date[0]}}.{{element.date[1]}}.{{element.date[2]}} </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="nick">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nick </th>
+        <td mat-cell *matCellDef="let element"> {{element.nick}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="productRating">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Rating </th>
+          <td mat-cell *matCellDef="let element">
+            <i *ngIf="element.productRating==undefined">-</i>
+            {{element.productRating}} </td>
+        </ng-container>
+
+      <ng-container matColumnDef="text">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Text </th>
+          <td mat-cell *matCellDef="let element"> {{element.text}} </td>
+        </ng-container>
+
+      <ng-container matColumnDef="url">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Url </th>
+          <td mat-cell *matCellDef="let element"> {{element.url}} </td>
+        </ng-container>
+
+      <ng-template [ngIf]="dataSource.data.length == 0">
+        <tr mat-footer-row *matFooterRowDef="['noRecord']"></tr>
+      </ng-template>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      
+    </table>
+    
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  
+  </div>
+  
+  <div class="form-inline block-pos">
+    <div class="form-group">
+  <button class="btn btn-info btn-lg margin-small btn-pos" [disabled]="disabled" (click)="DownloadCSV()">
+    <ng-container *ngIf="loading"><i class="fas fa-spinner fa-spin"></i> Processing... </ng-container> 
+    <ng-container *ngIf="!loading"><i>Pobierz</i></ng-container> </button></div>
+    <div class="form-group">
+  <button class="btn btn-info btn-lg margin-small btn-pos" [disabled]="disabled" (click)="DownloadCSVID('Id')">
+    <ng-container *ngIf="loading"><i class="fas fa-spinner fa-spin"></i> Processing... </ng-container> 
+    <ng-container *ngIf="!loading"><i>Pobierz_wybrany</i></ng-container> </button></div>
+    <div class="form-group mx-sm-3 mb-2">
+      <input type="text" value="0" type="number" [(ngModel)]="Id" class="form-control input-pos">
+    </div>
+    <div class="form-group">
+  <button class="btn btn-info btn-lg margin-small btn-pos" [disabled]="disabled" (click)="Clear()">
+    <ng-container *ngIf="loading"><i class="fas fa-spinner fa-spin"></i> Processing... </ng-container> 
+    <ng-container *ngIf="!loading"><i>Wyczyść</i></ng-container> </button></div>
+  </div>
+  </div>
