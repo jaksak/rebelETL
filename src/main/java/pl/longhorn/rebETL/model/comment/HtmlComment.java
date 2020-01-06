@@ -16,5 +16,5 @@ public class HtmlComment implements Serializable {
     private String productRating;
     private String commentRating;
     private String text;
-
+    private String url;
 }

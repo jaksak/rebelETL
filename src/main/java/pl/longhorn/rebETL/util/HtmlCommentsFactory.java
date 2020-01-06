@@ -8,7 +8,7 @@ public class HtmlCommentsFactory {
     private static final int NUMBER_PRODUCT_RATING_ELEMENT_INDEX = 1;
     private static final int PRIME = 31;
 
-    public static HtmlComment from(Element one) {
+    public static HtmlComment from(Element one, String url) {
         return HtmlComment.builder()
                 .id(getId(one))
                 .nick(getNick(one))
@@ -16,6 +16,7 @@ public class HtmlCommentsFactory {
                 .text(getText(one))
                 .commentRating(getCommentRating(one))
                 .productRating(getProductRating(one))
+                .url(url)
                 .build();
     }
 

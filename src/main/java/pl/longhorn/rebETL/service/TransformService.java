@@ -45,6 +45,7 @@ public class TransformService implements EtlService<TransformParam> {
                 .productRating(getProductRating(htmlComment.getProductRating()))
                 .commentRating(getCommentRating(htmlComment.getCommentRating()))
                 .text(htmlComment.getText())
+                .url(htmlComment.getUrl())
                 .build();
     }
 

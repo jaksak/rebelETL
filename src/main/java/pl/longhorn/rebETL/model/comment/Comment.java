@@ -22,4 +22,5 @@ public class Comment {
     private Integer commentRating;
     @Lob
     private String text;
+    private String url;
 }

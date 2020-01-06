@@ -25,21 +25,21 @@ public class ExportService implements EtlService<ExportParam> {
     @Override
     public long process(ExportParam param) {
         String pathToAllComments = UrlHelper.getPathToAllComments(param.getUrl());
-        return exportFromAllCommentsPage(pathToAllComments);
+        return exportFromAllCommentsPage(pathToAllComments, param.getUrl());
     }
 
-    private int exportFromAllCommentsPage(String pathToAllComments) {
+    private int exportFromAllCommentsPage(String pathToAllComments, String url) {
         val htmlComments = getHtmlComments(pathToAllComments);
-        return saveTemporallyHtmlComments(htmlComments);
+        return saveTemporallyHtmlComments(htmlComments, url);
     }
 
-    private int saveTemporallyHtmlComments(Elements htmlComments) {
-        htmlComments.forEach(this::saveTemporallyHtmlComment);
+    private int saveTemporallyHtmlComments(Elements htmlComments, String url) {
+        htmlComments.forEach(htmlComment -> saveTemporallyHtmlComment(htmlComment, url));
         return htmlComments.size();
     }
 
-    private void saveTemporallyHtmlComment(Element one) {
-        HtmlComment comment = HtmlCommentsFactory.from(one);
+    private void saveTemporallyHtmlComment(Element one, String url) {
+        HtmlComment comment = HtmlCommentsFactory.from(one, url);
         fileSystemService.save(comment);
     }
 
