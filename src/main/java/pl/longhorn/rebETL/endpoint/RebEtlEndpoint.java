@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.longhorn.rebETL.model.CompleteView;
 import pl.longhorn.rebETL.model.clear.ClearParam;
+import pl.longhorn.rebETL.model.comment.Comment;
 import pl.longhorn.rebETL.model.export.ExportParam;
 import pl.longhorn.rebETL.model.export.ExportView;
 import pl.longhorn.rebETL.model.load.LoadParam;
 import pl.longhorn.rebETL.model.load.LoadView;
 import pl.longhorn.rebETL.model.transform.TransformParam;
 import pl.longhorn.rebETL.model.transform.TransformView;
+import pl.longhorn.rebETL.repository.CommentRepository;
 import pl.longhorn.rebETL.service.CsvService;
 import pl.longhorn.rebETL.service.DownloadDataService;
 import pl.longhorn.rebETL.service.SequenceEtlProcessingService;
@@ -23,6 +25,7 @@ public class RebEtlEndpoint {
     private final SequenceEtlProcessingService sequenceEtlProcessingService;
     private final CsvService csvService;
     private final DownloadDataService downloadDataService;
+    private final CommentRepository commentRepository;
 
     @PostMapping("export")
     public ExportView export(@RequestBody String url) {
@@ -65,5 +68,10 @@ public class RebEtlEndpoint {
     @GetMapping("{id}/")
     public void download(@PathVariable("id") int id, HttpServletResponse response) {
         downloadDataService.download(id, response);
+    }
+
+    @GetMapping
+    public Iterable<Comment> getAll() {
+        return commentRepository.findAll();
     }
 }
